@@ -1,5 +1,6 @@
 chrome.manifest
 install.rdf
 *.xpi
+*.sublime-*
 addon/StudyUtils.jsm
 node_modules
