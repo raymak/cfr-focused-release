@@ -74,6 +74,10 @@ function load(data) {
     toggleCheckbox();
   });
 
+  if (!data.sponsored) {
+    document.getElementById("sponsored-section").classList.add("hidden");
+  }
+
   // setting the callback
   document.getElementById("sec-button").addEventListener("click", secButtonClick);
   document.getElementById("prim-button").addEventListener("click", primButtonClick);
@@ -85,8 +89,8 @@ function load(data) {
   registerExternalLinks();
 
   // updatePanelSize();
-  
-  timeoutTimer = content.setTimeout(timeout, 2 * 60 * 1000);
+
+  timeoutTimer = content.setTimeout(timeout, 3 * 60 * 1000);
 }
 
 function registerExternalLinks() {

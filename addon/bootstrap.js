@@ -19,7 +19,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Recommender", "resource://focused-cfr-s
 XPCOMUtils.defineLazyModuleGetter(this, "Preferences", "resource://gre/modules/Preferences.jsm");
 
 const EXPIRATION_DATE_STRING_PREF = "extensions.focused_cfr_study.expiration_date_string";
-
+const VARIATION_PREF = "extensions.focused_cfr_study.variation";
 let recommender;
 
 function telemetry(data) {
@@ -43,7 +43,7 @@ async function startup(addonData, reason) {
     const now = new Date(Date.now());
     const expirationDateString = new Date(now.setDate(now.getDate() + 14)).toISOString();
     Preferences.set(EXPIRATION_DATE_STRING_PREF, expirationDateString);
-}
+  }
 
   Jsm.import(config.modules);
 
@@ -130,6 +130,12 @@ function createLog(name, levelWord) {
 }
 
 async function chooseVariation() {
+
+  if (Preferences.get(VARIATION_PREF)) {
+    console.log("overriding variation");
+    return JSON.parse(Preferences.get(VARIATION_PREF));
+  }
+
   let toSet, source;
   const sample = studyUtils.sample;
 

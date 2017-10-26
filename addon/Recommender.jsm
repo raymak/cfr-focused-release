@@ -45,9 +45,12 @@ const POCKET_BOOKMARK_COUNT_PREF = "extensions.focused_cfr_study.pocket_bookmark
 const AMAZON_COUNT_PREF = "extensions.focused_cfr_study.amazon_count_threshold";
 const PAGE_VISIT_GAP_PREF = "extensions.focused_cfr_study.page_visit_gap_minutes";
 const DEBUG_MODE_PREF = "extensions.focused_cfr_study.debug_mode";
+const POCKET_LATEST_SINCE_PREF = "extensions.pocket.settings.latestSince";
+const MOBILE_PRESENTATION_DELAY_PREF = "extensions.focused_cfr_study.mobile_presentation_delay_minutes";
 
-const POCKET_BOOKMARK_COUNT_TRHESHOLD = 20;
-const AMAZON_VISIT_THRESHOLD = 3;
+const POCKET_BOOKMARK_COUNT_TRHESHOLD = 50;
+const AMAZON_VISIT_THRESHOLD = 1;
+const MOBILE_PRESENTATION_DELAY_MINS = 5;
 
 const AMAZON_LINK = "www.amazon.com/gp/BIT/ref=bit_v2_BDFF1?tagbase=mozilla1";
 const AMAZON_ADDON_ID = "abb@amazon.com";
@@ -82,6 +85,7 @@ const recipes = {
       url: "resource://focused-cfr-shield-study-content/images/amazon-assistant.png",
       alt: "Amazon Assistant logo",
     },
+    sponsored: true,
   },
   "mobile-promo": {
     id: "mobile-promo",
@@ -127,16 +131,25 @@ function getMostRecentBrowserWindow() {
 
 class Recommender {
   constructor(telemetry, variation) {
+
+    if (variation.sponsored === "false") {
+      recipes["amazon-assistant"]["sponsored"] = false;
+    }
+
     this.telemetry = telemetry;
     this.variation = variation.name;
     this.variationUi = variation.ui;
     this.variationAmazon = variation.amazon;
+    this.variationSponsored = variation.sponsored;
   }
 
   test() {
-    // currentId = "pocket";
+    // setInterval(()=>console.log(`window document: `, getMostRecentBrowserWindow().document.hasFocus()), 3000);
+    currentId = "amazon-assistant";
     // (new Doorhanger(recipes[currentId], this.presentationMessageListener.bind(this))).present();
-    setInterval(() => Utils.printStorage(), 10000);
+    (new Doorhanger(recipes[currentId], this.presentationMessageListener.bind(this))).present();
+
+    // setInterval(() => Utils.printStorage(), 10000);
   }
 
   async start() {
@@ -148,6 +161,7 @@ class Recommender {
 
     await this.listenForMobilePromoTrigger();
     await this.listenForPageViews();
+    await this.listenForPocketUse();
     await this.listenForBookmarks();
     await this.listenForAddonInstalls();
 
@@ -173,9 +187,10 @@ class Recommender {
     if (this.variationAmazon === "high")
       Preferences.set(AMAZON_COUNT_PREF, AMAZON_VISIT_THRESHOLD);
     else
-      Preferences.set(AMAZON_COUNT_PREF, AMAZON_VISIT_THRESHOLD * 2);
+      Preferences.set(AMAZON_COUNT_PREF, AMAZON_VISIT_THRESHOLD * 3);
     Preferences.set(PAGE_VISIT_GAP_PREF, PAGE_VISIT_GAP_MINUTES);
     Preferences.set(DEBUG_MODE_PREF, false);
+    Preferences.set(MOBILE_PRESENTATION_DELAY_PREF, MOBILE_PRESENTATION_DELAY_MINS);
 
     Preferences.set(INIT_PREF, true);
 
@@ -189,6 +204,7 @@ class Recommender {
       "variation": this.variation,
       "variation_ui": this.variationUi,
       "variation_amazon": this.variationAmazon,
+      "variation_sponsored": this.variationSponsored,
     };
 
     data = Object.assign({}, data, logs);
@@ -202,6 +218,7 @@ class Recommender {
       "variation": this.variation,
       "variation_ui": this.variationUi,
       "variation_amazon": this.variationAmazon,
+      "variation_sponsored": this.variationSponsored,   
       "id": id,
       "event": event,
     };
@@ -209,7 +226,7 @@ class Recommender {
     this.telemetry(data);
   }
 
-  async reportNotificationResult(result) {
+  async reportNotificationResult(result, nevershow) {
     const recomm = await Storage.get(`recomms.${currentId}`);
 
     const data = {
@@ -217,9 +234,11 @@ class Recommender {
       "variation": this.variation,
       "variation_ui": this.variationUi,
       "variation_amazon": this.variationAmazon,
+      "variation_sponsored": this.variationSponsored,
       "count": String(recomm.presentation.count),
       "status": recomm.status,
       "id": currentId,
+      "nevershow": String(!!nevershow),
       "result": result,
     };
 
@@ -247,18 +266,24 @@ class Recommender {
       "amazon_dismiss": "false",
       "amazon_nevershow": "false",
       "amazon_timeout": "false",
+      "amazon_preused": "false",
+      "amazon_postused": "false",
       "mobile-promo_delivered": "false",
       "mobile-promo_action": "false",
       "mobile-promo_close": "false",
       "mobile-promo_dismiss": "false",
       "mobile-promo_nevershow": "false",
       "mobile-promo_timeout": "false",
+      "mobile-promo-preused": "false",
+      "mobile-promo-postued": "false",
       "pocket_delivered": "false",
       "pocket_action": "false",
       "pocket_close": "false",
       "pocket_dismiss": "false",
       "pocket_nevershow": "false",
       "pocket_timeout": "false",
+      "pocket_preused": "false",
+      "pocket_postused": "false",
     };
 
     await Storage.set("logs", logs);
@@ -320,7 +345,6 @@ class Recommender {
   }
 
   listenForAddonInstalls() {
-
     const that = this;
 
     addonListener = {
@@ -336,10 +360,12 @@ class Recommender {
             recomm.status = "preused";
             log("amazon preused");
             that.reportEvent("amazon-assistant", "preused");
+            that.updateLogWithId("amazon-assistant", "preused", "true");
           } else {
             recomm.status = "postused";
             log("amazon postused");
             that.reportEvent("amazon-assistant", "postused");
+            that.updateLogWithId("amazon-assistant", "postused", "true");
           }
 
           await Storage.update("recomms.amazon-assistant", recomm);
@@ -350,12 +376,43 @@ class Recommender {
     AddonManager.addAddonListener(addonListener);
   }
 
+  async listenForPocketUse() {
+
+    const that = this;
+
+    async function checkPrefs() {
+      const latestSince = Preferences.get(POCKET_LATEST_SINCE_PREF);
+
+      if (latestSince) {
+        const recomm = await Storage.get("recomms.pocket");
+
+        if (recomm.status === "waiting" || recomm.status === "queued") {
+          recomm.status = "preused";
+          log("pocket preused");
+          that.reportEvent("pocket", "preused");
+          that.updateLogWithId("pocket", "preused", "true");
+        } else {
+          recomm.status = "postused";
+          log("pocket postused");
+          that.reportEvent("pocket", "postused");
+          that.updateLogWithId("pocket", "postused", "true");
+        }
+
+        await Storage.update("recomms.pocket", recomm);
+      }
+    }
+
+    Preferences.observe(POCKET_LATEST_SINCE_PREF, checkPrefs);
+
+    await checkPrefs();
+  }
+
   async checkForAmazonVisit(hostname) {
     if (!AMAZON_AFFILIATIONS.includes(hostname)) return;
 
     const data = await Storage.get("recomms.amazon-assistant");
 
-    if (Date.now() - data.trigger.lastVisit < Preferences.get(PAGE_VISIT_GAP_PREF) * 60 * 1000) {
+    if (Date.now() - data.trigger.lastVisit < (Preferences.get(PAGE_VISIT_GAP_PREF) || PAGE_VISIT_GAP_MINUTES) * 60 * 1000) {
       log(`not counted as a new amazon visit, last visit: ${(Date.now() - data.trigger.lastVisit) / (1000)} seconds ago`);
       return;
     }
@@ -369,7 +426,7 @@ class Recommender {
 
     await Storage.update("recomms.amazon-assistant", data);
 
-    if (data.trigger.visitCount >= Preferences.get(AMAZON_COUNT_PREF)) {
+    if (data.trigger.visitCount >= (Preferences.get(AMAZON_COUNT_PREF) || AMAZON_VISIT_THRESHOLD)) {
       await this.queueRecommendation("amazon-assistant");
     }
 
@@ -383,20 +440,18 @@ class Recommender {
       const bookmarkCount = (await Bookmarks.getRecent(100)).length;
       that.reportEvent("bookmark-count", `${bookmarkCount}`);
       log(`bookmark count: ${bookmarkCount}`);
-      const threshold = Preferences.get(POCKET_BOOKMARK_COUNT_PREF);
+      const threshold = Preferences.get(POCKET_BOOKMARK_COUNT_PREF) || POCKET_BOOKMARK_COUNT_TRHESHOLD;
       if (bookmarkCount > threshold) {
         await that.queueRecommendation("pocket");
       }
     }
 
-    await checkThreshold();
-
     bookmarkObserver = {
-      onItemAdded: (aItemId, aParentId, aIndex, aItemType, aURI, aTitle,
-                    aDateAdded, aGuid, aParentGuid) => {
+      async onItemAdded(aItemId, aParentId, aIndex, aItemType, aURI, aTitle,
+                    aDateAdded, aGuid, aParentGuid) {
         log("bookmark added");
 
-        checkThreshold().then(() => this.presentRecommendation("pocket"));
+        await checkThreshold().then(() => that.presentRecommendation("pocket"));
       },
       onItemRemoved() {},
 
@@ -410,6 +465,8 @@ class Recommender {
     };
 
     bmsvc.addObserver(bookmarkObserver, false);
+
+    await checkThreshold();
   }
 
   listenForPageViews() {
@@ -499,7 +556,26 @@ class Recommender {
       log(`desktop clients: ${desktopClients}`);
       log(`mobile clients: ${mobileClients}`);
 
-      if (mobileClients > 0) return null;
+      if (mobileClients > 0) {
+
+        // check for preuse or postuse
+
+        const recomm = await Storage.get("recomms.mobile-promo");
+
+        if (recomm.status === "waiting" || recomm.status === "queued") {
+          recomm.status = "preused";
+          log("mobile promo preused");
+          that.reportEvent("mobile-promo", "preused");
+          that.updateLogWithId("mobile-promo", "preused", "true");
+        } else {
+          recomm.status = "postused";
+          log("mobile promo postused");
+          that.reportEvent("mobile-promo", "postused");
+          that.updateLogWithId("mobile-promo", "postused", "true");
+        }
+
+        await Storage.update("recomms.mobile-promo", recomm);
+      }
 
       if (desktopClients > 0 && mobileClients === 0)
         return that.queueRecommendation("mobile-promo");
@@ -510,7 +586,10 @@ class Recommender {
     Preferences.observe("services.sync.clients.devices.desktop", checkPrefs);
     Preferences.observe("services.sync.clients.devices.mobile", checkPrefs);
 
-    setTimeout(() => this.presentRecommendation("mobile-promo"), 10 * 60 * 1000);
+    setTimeout(() => {
+      if (getMostRecentBrowserWindow().document.hasFocus())
+        that.presentRecommendation("mobile-promo");
+    }, (Preferences.get(MOBILE_PRESENTATION_DELAY_PREF) || MOBILE_PRESENTATION_DELAY_MINS) * 60 * 1000);
 
     return checkPrefs();
   }
@@ -545,11 +624,11 @@ class Recommender {
     log(recomm);
 
     if (recomm.status === "waiting" || recomm.status === "action" || recomm.status === "preused" || recomm.status === "postused") return;
-    if (recomm.presentation.count >= Preferences.get(MAX_NUMBER_OF_NOTIFICATIONS_PREF)) {
+    if (recomm.presentation.count >= (Preferences.get(MAX_NUMBER_OF_NOTIFICATIONS_PREF) || MAX_NUMBER_OF_NOTIFICATIONS)) {
       log(`max number of notifications delivered for ${id}`);
       return;
     }
-    if (Date.now() - general.lastNotification < Preferences.get(NOTIFICATION_GAP_PREF) * 60 * 1000) {
+    if (Date.now() - general.lastNotification < (Preferences.get(NOTIFICATION_GAP_PREF) || NOTIFICATION_GAP_MINUTES) * 60 * 1000) {
       log(`notification gap not enough for delivery`);
       return;
     }
@@ -611,7 +690,7 @@ class Recommender {
           await this.neverShow(currentId);
         }
         await this.reportSummary();
-        await this.reportNotificationResult("dismiss");
+        await this.reportNotificationResult("dismiss", message.data);
         break;
 
       case "FocusedCFR::timeout":
@@ -621,7 +700,7 @@ class Recommender {
           await this.neverShow(currentId);
         }
         await this.reportSummary();
-        await this.reportNotificationResult("timeout");
+        await this.reportNotificationResult("timeout", message.data);
         break;
 
 
@@ -639,7 +718,7 @@ class Recommender {
           await this.neverShow(currentId);
         }
         await this.reportSummary();
-        await this.reportNotificationResult("close");
+        await this.reportNotificationResult("close", message.data);
         break;
     }
   }

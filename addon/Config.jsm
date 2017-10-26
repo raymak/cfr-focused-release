@@ -14,35 +14,40 @@ var EXPORTED_SYMBOLS = ["config"];
 
 var config = {
   "study": {
-    "studyName": "focused-cfr-beta-1", // no spaces, for all the reasons
+    "studyName": "focused-cfr-release-2", // no spaces, for all the reasons
     "weightedVariations": [
       {"name": "control",
         "weight": 1,
         "ui": "control",
         "amazon": "control",
+        "sponsored": "false",
       },
       {"name": "doorhanger-amazon-low",
         "weight": 1,
         "ui": "doorhanger",
         "amazon": "low",
+        "sponsored": "false",
       },
       {
         "name": "doorhanger-amazon-high",
         "weight": 1,
         "ui": "doorhanger",
         "amazon": "high",
+        "sponsored": "false",
       },
       {
-        "name": "bar-amazon-low",
+        "name": "doorhanger-amazon-high-sponsored",
         "weight": 1,
-        "ui": "bar",
-        "amazon": "low",
+        "ui": "doorhanger",
+        "amazon": "high",
+        "sponsored": "true",
       },
       {
         "name": "bar-amazon-high",
         "weight": 1,
         "ui": "bar",
         "amazon": "high",
+        "sponsored": "false",
       },
     ],
     /** **endings**
@@ -55,13 +60,13 @@ var config = {
     "endings": {
       /** standard endings */
       "user-disable": {
-        "baseUrl": null,
+        "baseUrl": "https://qsurvey.mozilla.com/s3/Focused-CFR-V2",
       },
       "ineligible": {
         "baseUrl": null,
       },
       "expired": {
-        "baseUrl": "https://qsurvey.mozilla.com/s3/cfr-v1",
+        "baseUrl": "https://qsurvey.mozilla.com/s3/Focused-CFR-V2",
       },
       /** User defined endings */
       "too-popular": {
@@ -76,7 +81,7 @@ var config = {
     },
     "telemetry": {
       "send": true, // assumed false. Actually send pings?
-      "removeTestingFlag": true,  // Marks pings as testing, set true for actual release
+      "removeTestingFlag": false,  // Marks pings as testing, set true for actual release
       // TODO "onInvalid": "throw"  // invalid packet for schema?  throw||log
     },
     "studyUtilsPath": `./StudyUtils.jsm`,

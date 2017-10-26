@@ -56,7 +56,7 @@ const notificationBar = {
 
   init() {
     this.addListeners();
-    this.timeoutTimer = content.setTimeout(() => this.timeout(), 2 * 60 * 1000);
+    this.timeoutTimer = content.setTimeout(() => this.timeout(), 10 * 60 * 1000);
   },
 
   addListeners() {

@@ -1,20 +1,6 @@
-# Test Plan for the Focused CFR Addon (in beta)
-
-## Automated Testing
-
-`npm test` does **optimistic testing** of the *commonest path* though the study for a user
-
-- prove the notification bar ui opens
-- *clicking on the left-most button presented*.
-- verifying that sent Telemetry is correct.
-
-Code at [./test/functional_test.js].
+# Test Plan for the Focused CFR Addon (in release)
 
 ## Manual / QA TEST Instructions
-
-Assumptions / Thoughts
-
-1.  Please ask if you want  more command-line tools to do this testing.
 
 ## Overall overview of what the addon does
 
@@ -28,174 +14,229 @@ You can read an overview of what the addon is doing [here](https://docs.google.c
 3.  Open the drop-down menu with the cog icon in the upper right corner
 4.  `Install Add-on From File`
 
-### BEFORE EACH TEST: SET THE SPECIFIED PREFERENCES
+### BEFORE EACH TEST: SET THE SPECIFIED PREFERENCES in `about:config`
 
 This makes testing simpler as you don't have to long repititive tasks to trigger recommendations or wait too long to see next recommendations.
 
 ### Do these tests.
 
-1.  UI APPEARANCE.  OBSERVE a notification bar with these traits:
+1.  UI APPEARANCE -- Amazon Assistant (DOORHANGER)
 
-    *  Icon is 'heartbeat'
-    *  Text is one of 8 selected "questions", such as:  "Do you like Firefox?".  These are listed in [./addon/Config.jsm] as the variable `weightedVariations`.
-    *  clickable buttons with labels 'yes | not sure | no'  OR 'no | not sure | yes' (50/50 chance of each)
-    *  an `x` button at the right that closes the notice.
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    *  Go to `amazon.com`
+    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/qPSg63E.png))
+    *  Text is 'Instant product matches while you shop across the web with Amazon Assistant'
+    *  Buttons are "Not Now" and 'Add to Firefox'
+    *  'Not Now' closes the doorhanger
+    *  'Add to Firefox' directs the user to 'www.amazon.com/gp/BIT/ref=bit_v2_BDFF1?tagbase=mozilla1' and closes the panel
 
     Test fails IF:
 
-    - there is no bar.
-    - elements are not correct or are not displayed
+    - Doorhanger does not pop up
+    - Elements are not correct or are not displayed
 
+2.  UI APPEARANCE -- Amazon Assistant (NOTIFICATION BAR)
 
-2.  UI functionality: VOTE
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    *  Go to `amazon.com`
+    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/O2pg5Nv.png))
+    *  Text is 'Instant product matches while you shop across the web with Amazon Assistant'
+    *  Buttons are 'Add to Firefox' and an 'x' button on the right corner of the panel
+    *  'x' closes the panel
+    *  'Add to Firefox' directs the user to "www.amazon.com/gp/BIT/ref=bit_v2_BDFF1?tagbase=mozilla1" and closes the panel
 
-    Expect:  Click on a 'vote' button (any of: `yes | not sure | no`) has all these effects
+    Test fails IF:
 
-    - notice closes
-    - addon uninstalls
-    - no additional tabs open
-    - telemetry pings are 'correct' with this SPECIFIC `study_state` as the ending
+    - Notification bar does not pop up
+    - Elements are not correct or are not displayed
 
-        - ending is `voted`
-        - 'vote' is correct.
+3.  UI APPEARANCE -- Pocket (DOORHANGER)
 
-3.  UI functionality: 'X' button
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    * Set Preferences
+    &nbsp; extensions.focused_cfr_study.pocket_bookmark_count_threshold = 2
+    *  Bookmark any web page
+    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/JmSKatg.png))
+    *  Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
+    *  Buttons are 'Make a match'
+    *  'Not Now' closes the doorhanger
+    *  'Make a match' directs the user to 'https://getpocket.com/firefox/' and closes the panel
 
-    Click on the 'x' button.
+    Test fails IF:
 
-    - notice closes
-    - addon uninstalls
-    - no additional tabs open
-    - telemetry pings are 'correct' with this SPECIFIC ending
+    - Doorhanger does not pop up
+    - Elements are not correct or are not displayed
 
-      - ending is `notification-x`
+4.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
 
-4.  UI functionality  'close window'
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    * Set Preferences
+    &nbsp; extensions.focused_cfr_study.pocket_bookmark_count_threshold = 2
+    *  Bookmark any web page
+    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/a72w2Op.png))
+    *  Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
+    *  Buttons are 'Try it Now' and an 'x' button on the right corner of the panel
+    *  'x' closes the panel
+    *  'Try it Now' directs the user to 'https://getpocket.com/firefox/' and closes the panel
 
-    1.  Open a 2nd firefox window.
-    2.  Close the initial window.
+    Test fails IF:
 
-    Then observe:
+    - Notification bar does not pop up
+    - Elements are not correct or are not displayed
 
-    - notice closes
-    - addon uninstalls
-    - no additional tabs open
-    - telemetry pings are 'correct' with this SPECIFIC ending
+5.  UI APPEARANCE -- Mobile Promotion (DOORHANGER)
 
-      - ending is `window-or-fx-closed`
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    *  (Create and) log into a Firefox Sync account that has no mobile devices attached to it
+    *  Wait for 5 minutes after logging in
+    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/stQsKLJ.png))
+    *  Text is 'Your Firefox account meets your phone. They fall in love. Get Firefox on your phone now.'
+    *  Buttons are 'Not Now' and 'Try it Now'
+    *  'Not Now' closes the doorhanger
+    *  'Make a match' directs the user to 'https://www.mozilla.org/en-US/firefox/mobile-download/desktop/' and closes the panel
 
+    Test fails IF:
 
----
-## Helper code and tips
+    - Doorhanger does not pop up
+    - Elements are not correct or are not displayed
 
-### ***To open a Chrome privileged console***
+6.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
 
-1.  `about:addons`
-2.  `Tools > web developer console`
+    * Set Preferences
+    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
+    *  Install the addon
+    *  (Create and) log into a Firefox Sync account that has no mobile devices attached to it
+    *  Wait for 10 minutes after logging in
+    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/vOzhbOf.png))
+    *  Text is 'Your Firefox account meets your phone. They fall in love. Get Firefox on your phone now.'
+    *  Buttons are 'Make a Match' and an 'x' button on the right corner of the panel
+    *  'x' closes the panel
+    *  'Make a match' directs the user to 'https://www.mozilla.org/en-US/firefox/mobile-download/desktop/' and closes the panel
 
-Or use other methods, like Scratchpad.
+    Test fails IF:
 
+    - Notification bar does not pop up
+    - Elements are not correct or are not displayed
 
-### **Telemetry Ping Printing Helper Code**
+7. TELEMETRY PING -- Notification Result
 
-```javascript
-async function printPings() {
-  async function getTelemetryPings (options) {
-    // type is String or Array
-    const {type, n, timestamp, headersOnly} = options;
-    Components.utils.import("resource://gre/modules/TelemetryArchive.jsm");
-    // {type, id, timestampCreated}
-    let pings = await TelemetryArchive.promiseArchivedPingList();
-    if (type) {
-      if (!(type instanceof Array)) {
-        type = [type];  // Array-ify if it's a string
-      }
+  * Performing one of tests 1 to 6 should result in the Telemetry ping with a payload similar to the following: 
+
+``` {
+  "version": 3,
+  "study_name": "focused-cfr-release-2",
+  "branch": "doorhanger-amazon-low",
+  "addon_version": "1.0.1",
+  "shield_version": "4.0.0",
+  "type": "shield-study-addon",
+  "data": {
+    "attributes": {
+      "message_type": "notification_result",
+      "variation": "doorhanger-amazon-low",
+      "variation_ui": "doorhanger",
+      "variation_amazon": "low",
+      "variation_sponsored": "false",
+      "nevershow": "false",
+      "count": "1",
+      "status": "presented",
+      "id": "amazon-assistant",
+      "result": "dismiss"
     }
-    if (type) pings = pings.filter(p => type.includes(p.type));
-    if (timestamp) pings = pings.filter(p => p.timestampCreated > timestamp);
-
-    pings.sort((a, b) => b.timestampCreated - a.timestampCreated);
-    if (n) pings = pings.slice(0, n);
-    const pingData = headersOnly ? pings : pings.map(ping => TelemetryArchive.promiseArchivedPingById(ping.id));
-    return Promise.all(pingData)
-  }
-  async function getPings() {
-    const ar = ["shield-study", "shield-study-addon"];
-    return getTelemetryPings({type: ["shield-study", "shield-study-addon"]});
-  }
-
-  const pings = (await getPings()).reverse();
-  const p0 = pings[0].payload;
-  // print common fields
-  console.log(
-    `
-// common fields
-
-branch        ${p0.branch}        // should describe Question text
-study_name    ${p0.study_name}
-addon_version ${p0.addon_version}
-version       ${p0.version}
-
-    `
-  )
-
-  pings.forEach(p=>{
-    console.log(p.creationDate, p.payload.type);
-    console.log(JSON.stringify(p.payload.data,null,2))
-  })
+  },
+  "testing": true
 }
-
-printPings()
 
 ```
+  * the "result" field should be one of [`dismiss`, `action`, `close`, `timeout`] depending on what you do on the panel: `dimiss` is clicking on `Not Now`; `action` is clicking the blue button; `close` is clicking the `x` button; `timeout` is not interacting with the panel for two minutes (and it fades)
+  * the "nevershow" field should be "false" or "true" based on whether the "Don't show this me again" checkbox has been checked
 
+    Test fails IF:
 
-### Example sequence for a 'voted => not sure' interaction
+    - No such ping is submitted to telemetry
+    - Any of the fields is empty
+    - Any of the fields does not match the branch or the recommended feature
 
-```
+8. TELEMETRY PING -- Events
 
-// common fields
+  * Performing one of the tests 1 to 6 should result in the Telemetry ping with a payload similar to the following: 
 
-branch        up-to-expectations-1        // should describe Question text
-study_name    57-perception-shield-study
-addon_version 1.0.0
-version       3
-
-
-2017-10-09T14:16:18.042Z shield-study
+``` 
 {
-  "study_state": "enter"
-}
-2017-10-09T14:16:18.055Z shield-study
-{
-  "study_state": "installed"
-}
-2017-10-09T14:16:18.066Z shield-study-addon
-{
-  "attributes": {
-    "event": "prompted",
-    "promptType": "notificationBox-strings-1"
-  }
-}
-2017-10-09T16:29:44.109Z shield-study-addon
-{
-  "attributes": {
-    "promptType": "notificationBox-strings-1",
-    "event": "answered",
-    "yesFirst": "1",
-    "score": "0",
-    "label": "not sure",
-    "branch": "up-to-expectations-1",
-    "message": "Is Firefox performing up to your expectations?"
-  }
-}
-2017-10-09T16:29:44.188Z shield-study
-{
-  "study_state": "ended-neutral",
-  "study_state_fullname": "voted"
-}
-2017-10-09T16:29:44.191Z shield-study
-{
-  "study_state": "exit"
+  "version": 3,
+  "study_name": "focused-cfr-release-2",
+  "branch": "doorhanger-amazon-high-sponsored",
+  "addon_version": "1.0.1",
+  "shield_version": "4.0.0",
+  "type": "shield-study-addon",
+  "data": {
+    "attributes": {
+      "message_type": "event",
+      "variation": "doorhanger-amazon-high",
+      "variation_ui": "doorhanger",
+      "variation_amazon": "high",
+      "variation_sponsored": "true",
+      "id": "amazon-assistant",
+      "event": "presented"
+    }
+  },
+  "testing": false
 }
 ```
+
+  * you should see at least two pings with `message_type`: `event`: one with `event`: `presented` and one with `event`: `queued`
+
+   Test fails IF:
+
+    - No such ping is submitted to telemetry
+    - Any of the fields is empty
+    - Any of the fields does not match the branch or the recommended feature
+
+9. PERSISTENCE TEST -- Initialization
+
+  * Install the addon
+  * Shut down Firefox and open it again with the same profile
+  * Perform one of tests 1 to 6
+  * You should still see the expected result
+
+10. NOTIFICATION LIMITING -- Global Notification Limiting
+
+  * Perform test 1
+  * Perform test 3 on the *same profile* after the installation step (do not reinstall the addon)
+  * No notification should be shown
+
+  Test fails IF:
+
+    - A notification is shown after the bookmarking
+
+
+11. NOTIFICATION LIMITING -- Per Feature Limiting
+
+  * Set Preferences
+  &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high-sponsored", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "true"}
+  * Install the addon
+  * Set Preferences
+  &nbsp; extensions.focused_cfr_study.page_visit_gap_minutes = 0
+  &nbsp; extensions.focused_cfr_study.max_number_of_notifications = 1
+  &nbsp; extensions.focused_cfr_study.notification_gap_minutes = 0
+  * Go to `amazon.com`
+  * You should see a doorhanger with the Amazon Assistant recommendation
+  * Dismiss the doorhanger by clicking on "Not Now"
+  * Go to `amazon.com` again
+  * You should not see any notifications
+
+  Test fails IF:
+
+    - A notification is shown after the second visit to `Amazon.com`
+
+
+

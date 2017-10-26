@@ -30,7 +30,7 @@ const MESSAGES = [
   "FocusedCFR::close",
   "FocusedCFR::action",
   "FocusedCFR::timeout",
-  "FocusedCFR::resize"
+  "FocusedCFR::resize",
 ];
 
 this.EXPORTED_SYMBOLS = ["Doorhanger"];
@@ -74,9 +74,9 @@ class Doorhanger {
     panel.setAttribute("type", "arrow");
     panel.setAttribute("noautofocus", true);
     panel.setAttribute("noautohide", true);
-    panel.setAttribute("level", "parent");
+    panel.setAttribute("level", "floating");
 
-    if (Services.appinfo.OS === "Darwin"){
+    if (Services.appinfo.OS === "Darwin") {
 	    panel.style.height = "183px";
 	    panel.style.width = "353px";
 	  } else {
@@ -179,8 +179,9 @@ class Doorhanger {
         break;
 
       case "FocusedCFR::resize":
-        log('updating panel size to :', message.data);
-        panel.sizeTo(message.data.width+3, message.data.height+21)
+        log("updating panel size to :", message.data);
+        panel.sizeTo(message.data.width + 3, message.data.height + 21);
+        break;
 
       default:
         this.messageListenerCallback(message);
