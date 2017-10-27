@@ -83,6 +83,8 @@ function shutdown(addonData, reason) {
     if (!studyUtils._isEnding) {
       // we are the first requestors, must be user action.
       console.log("user requested shutdown");
+      recommender.shutdown();
+      Cu.unload("resource://focused-cfr-shield-study/Recommender.jsm");
       studyUtils.endStudy({reason: "user-disable"});
       return;
     }

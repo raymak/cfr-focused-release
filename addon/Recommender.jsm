@@ -24,6 +24,9 @@ const bmsvc = Cc["@mozilla.org/browser/nav-bookmarks-service;1"]
 
 let notificationBar;
 let doorhanger;
+let pocketPrefCheck;
+let mobilePrefCheck;
+let progressListener;
 
 const AMAZON_AFFILIATIONS = [
   "www.amazon.com",
@@ -406,6 +409,8 @@ class Recommender {
       }
     }
 
+    pocketPrefCheck = checkPrefs;
+
     Preferences.observe(POCKET_LATEST_SINCE_PREF, checkPrefs);
 
     await checkPrefs();
@@ -477,7 +482,7 @@ class Recommender {
 
     const that = this;
 
-    const progressListener = {
+    progressListener = {
       QueryInterface: XPCOMUtils.generateQI(["nsIWebProgressListener",
         "nsISupportsWeakReference"]),
 
@@ -586,6 +591,8 @@ class Recommender {
       if (desktopClients > 0 && mobileClients === 0)
         await that.queueRecommendation("mobile-promo");
     }
+
+    mobilePrefCheck = checkPrefs;
 
     Preferences.observe("services.sync.clients.devices.mobile", checkPrefs);
 
@@ -727,7 +734,21 @@ class Recommender {
   }
 
   shutdown() {
+
+    log('shutting down Recommender.jsm');
+
     bmsvc.removeObserver(bookmarkObserver);
+
+    const windowEnumerator = Services.wm.getEnumerator("navigator:browser");
+
+    while (windowEnumerator.hasMoreElements()) {
+      const window = windowEnumerator.getNext();
+      window.gBrowser.removeProgressListener(progressListener);
+    }
+
+    Preferences.ignore("services.sync.clients.devices.mobile", mobilePrefCheck);
+    Preferences.ignore(POCKET_LATEST_SINCE_PREF, pocketPrefCheck);
+
     if (doorhanger) {
       doorhanger.shutdown();
     }
