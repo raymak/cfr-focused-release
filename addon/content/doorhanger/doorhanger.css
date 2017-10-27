@@ -191,7 +191,7 @@ a {
 
 #picture {
   /*position: absolute;*/
-  width: 30%;
+  width: 25%;
   text-align: center;
   
 }
@@ -215,10 +215,10 @@ a {
 #sponsored-section {
   font-size: 12px;
   position: relative;
-  width: 30%;
+  /* width: 30%; */
   color: grey;
   margin-top: 5px;
-  visibility: visible;
+  visibility: hidden;
 }
 
 #sponsored-section.hidden {
@@ -228,6 +228,11 @@ a {
 #sponsored-text {
   margin-left: 22px;
   display: inline-block;
+}
+
+#sponsored-inline {
+  font-weight: bold;
+  font-size: 14px;
 }
 
 #like-smiley {
@@ -268,7 +273,7 @@ a {
 }
 
 #textsection {
-  width: 70%;
+  width: 75%;
 }
  
 #header {

@@ -48,7 +48,7 @@ const DEBUG_MODE_PREF = "extensions.focused_cfr_study.debug_mode";
 const POCKET_LATEST_SINCE_PREF = "extensions.pocket.settings.latestSince";
 const MOBILE_PRESENTATION_DELAY_PREF = "extensions.focused_cfr_study.mobile_presentation_delay_minutes";
 
-const POCKET_BOOKMARK_COUNT_TRHESHOLD = 50;
+const POCKET_BOOKMARK_COUNT_TRHESHOLD = 80;
 const AMAZON_VISIT_THRESHOLD = 1;
 const MOBILE_PRESENTATION_DELAY_MINS = 5;
 
@@ -95,7 +95,7 @@ const recipes = {
     },
     primaryButton: {
       label: "Make a match",
-      url: `https://www.mozilla.org/en-US/firefox/mobile-download/desktop/`,
+      url: `https://www.mozilla.org/en-US/firefox/mobile-download/desktop/?src=cfr-v2`,
     },
     icon: {
       url: "resource://focused-cfr-shield-study-content/images/mobile-promo.png",
@@ -108,7 +108,7 @@ const recipes = {
       text: "Pocket lets you save for later articles, videos, or pretty much anything!",
       link: {
         text: "Pocket",
-        url: "https://getpocket.com/firefox/",
+        url: "https://getpocket.com/firefox/?src=cfr-tooltip",
       },
     },
     primaryButton: {
@@ -218,7 +218,7 @@ class Recommender {
       "variation": this.variation,
       "variation_ui": this.variationUi,
       "variation_amazon": this.variationAmazon,
-      "variation_sponsored": this.variationSponsored,   
+      "variation_sponsored": this.variationSponsored,
       "id": id,
       "event": event,
     };
@@ -356,6 +356,8 @@ class Recommender {
 
           const recomm = await Storage.get("recomms.amazon-assistant");
 
+          if (recomm.status === "preused" || recomm.status === "postused") return;
+
           if (recomm.status === "waiting" || recomm.status === "queued") {
             recomm.status = "preused";
             log("amazon preused");
@@ -385,6 +387,8 @@ class Recommender {
 
       if (latestSince) {
         const recomm = await Storage.get("recomms.pocket");
+
+        if (recomm.status === "preused" || recomm.status === "postused") return;
 
         if (recomm.status === "waiting" || recomm.status === "queued") {
           recomm.status = "preused";
@@ -437,7 +441,7 @@ class Recommender {
 
     const that = this;
     async function checkThreshold() {
-      const bookmarkCount = (await Bookmarks.getRecent(100)).length;
+      const bookmarkCount = (await Bookmarks.getRecent(200)).length;
       that.reportEvent("bookmark-count", `${bookmarkCount}`);
       log(`bookmark count: ${bookmarkCount}`);
       const threshold = Preferences.get(POCKET_BOOKMARK_COUNT_PREF) || POCKET_BOOKMARK_COUNT_TRHESHOLD;
@@ -562,6 +566,8 @@ class Recommender {
 
         const recomm = await Storage.get("recomms.mobile-promo");
 
+        if (recomm.status === "preused" || recomm.status === "postused") return;
+
         if (recomm.status === "waiting" || recomm.status === "queued") {
           recomm.status = "preused";
           log("mobile promo preused");
@@ -578,12 +584,9 @@ class Recommender {
       }
 
       if (desktopClients > 0 && mobileClients === 0)
-        return that.queueRecommendation("mobile-promo");
-
-      return null;
+        await that.queueRecommendation("mobile-promo");
     }
 
-    Preferences.observe("services.sync.clients.devices.desktop", checkPrefs);
     Preferences.observe("services.sync.clients.devices.mobile", checkPrefs);
 
     setTimeout(() => {

@@ -74,8 +74,8 @@ function load(data) {
     toggleCheckbox();
   });
 
-  if (!data.sponsored) {
-    document.getElementById("sponsored-section").classList.add("hidden");
+  if (data.sponsored) {
+    textboxEle.innerHTML = `<span id="sponsored-inline">Sponsored: </span>` + textboxEle.innerHTML;
   }
 
   // setting the callback

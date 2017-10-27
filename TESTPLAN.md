@@ -3,10 +3,22 @@
 ## Manual / QA TEST Instructions
 
 ## Overall overview of what the addon does
+[COPY THE OVERVIEW]
 
-You can read an overview of what the addon is doing [here](https://docs.google.com/a/mozilla.com/document/d/17KHk42HdoLq4FvDk4g1lDRSgpOwaB2kuDE1vk7sBENY/edit?usp=sharing) that helps you understand why we set certain things up before each test.
+We would like to build a Firefox system addon that has the capability of proactively recommending Firefox features based on user behavior.
 
-### BEFORE EACH TEST: INSTALL THE ADDON to a CLEAN (NEW) PROFILE
+Features
+This study involves recommending three Firefox features:
+
+Amazon Assistant (extension)
+Pocket (system addon)
+Mobile Promotion
+
+
+## Before starting the testing
+Look at the '....' attachment in the bug [this bug].
+
+### BEFORE EACH TEST: CREATE AND GO to a CLEAN (NEW) PROFILE
 
 0.  (create profile:  https://developer.mozilla.org/en-US/Firefox/Multiple_profiles, or via some other method)
 1.  In your Firefox profile
@@ -14,14 +26,44 @@ You can read an overview of what the addon is doing [here](https://docs.google.c
 3.  Open the drop-down menu with the cog icon in the upper right corner
 4.  `Install Add-on From File`
 
-### BEFORE EACH TEST: SET THE SPECIFIED PREFERENCES in `about:config`
+## 1. UI APPEARANCE -- Amazon Assistant (DOORHANGER)
 
-This makes testing simpler as you don't have to long repititive tasks to trigger recommendations or wait too long to see next recommendations.
+1.  Setup
+
+    - [CREATE STRING PREFRENCE][create-preference]
+    
+        name `extensions.focused_cfr_study.variation` 
+        value: `{"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}`
+    
+    - INSTALL ADDON:  qa-telemeter
+    - INSTALL ADDON:  cfr-focused-release
+    
+2.  ACTION: NAVIGATE to amazon.com
+    
+3.  VERIFY doorhanger panel
+
+     1. A doorhanger opens attached from the awesome bar (screenshot)
+     2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
+     3. 2 buttons.  Labels "Not Now" and 'Add to Firefox'
+
+4.  CLICK on 'Not Now'.
+
+5.  VERIFY doorhanger closes.
+
+
+Note: failure if:
+
+- Doorhanger does not pop up
+- Elements are not correct or are not displayed
+
+
+[create-preference]: http://sumo.mozilla.com
 
 ### Do these tests.
 
 1.  UI APPEARANCE -- Amazon Assistant (DOORHANGER)
 
+    * Create a new profile
     * Set Preferences
     &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
     *  Install the addon
@@ -37,8 +79,24 @@ This makes testing simpler as you don't have to long repititive tasks to trigger
     - Doorhanger does not pop up
     - Elements are not correct or are not displayed
 
+Setup
+Create a new profile
+Create a new string preference ' ' with value ''
+Install the QA addon
+Install the CFR addon
+Action
+Navigare to amazon.com
+
+Verify
+Doorhanger hangs from the awesome bar
+Verify .....
+Verify
+
+
+
 2.  UI APPEARANCE -- Amazon Assistant (NOTIFICATION BAR)
 
+    * Create a new profile
     * Set Preferences
     &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
     *  Install the addon
@@ -56,6 +114,7 @@ This makes testing simpler as you don't have to long repititive tasks to trigger
 
 3.  UI APPEARANCE -- Pocket (DOORHANGER)
 
+    * Create a new profile
     * Set Preferences
     &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
     *  Install the addon
@@ -75,13 +134,15 @@ This makes testing simpler as you don't have to long repititive tasks to trigger
 
 4.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
 
-    * Set Preferences
+    * Create a new profile
+    * Create String Preference
     &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
+    * Install the addon
     * Set Preferences
     &nbsp; extensions.focused_cfr_study.pocket_bookmark_count_threshold = 2
-    *  Bookmark any web page
-    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/a72w2Op.png))
+    *  Use the s
+    *  N
+    *  Expect a notification bar appears on top of the page (it should look like this: [screenshot](https://i.imgur.com/a72w2Op.png))
     *  Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
     *  Buttons are 'Try it Now' and an 'x' button on the right corner of the panel
     *  'x' closes the panel
@@ -94,6 +155,7 @@ This makes testing simpler as you don't have to long repititive tasks to trigger
 
 5.  UI APPEARANCE -- Mobile Promotion (DOORHANGER)
 
+    * Create a new profile
     * Set Preferences
     &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
     *  Install the addon
@@ -112,6 +174,8 @@ This makes testing simpler as you don't have to long repititive tasks to trigger
 
 6.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
 
+
+    * Create a new profile
     * Set Preferences
     &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
     *  Install the addon
