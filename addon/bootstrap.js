@@ -20,6 +20,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "Preferences", "resource://gre/modules/P
 
 const EXPIRATION_DATE_STRING_PREF = "extensions.focused_cfr_study.expiration_date_string";
 const VARIATION_PREF = "extensions.focused_cfr_study.variation";
+const QUEUED_PREF = "extensions.focused_cfr_study.queued";
+
 let recommender;
 
 function telemetry(data) {
@@ -62,7 +64,14 @@ async function startup(addonData, reason) {
 
   const expirationDate = new Date(Preferences.get(EXPIRATION_DATE_STRING_PREF));
   if (Date.now() > expirationDate) {
-    studyUtils.endStudy({ reason: "expired" });
+    if (Preferences.get(QUEUED_PREF) && Preferences.get(QUEUED_PREF) > 0){
+      await studyUtils.endStudy({ reason: "expired-queued"});
+      return;
+    }
+    else{
+      await studyUtils.endStudy({ reason: "expired" });
+      return;
+    }
   }
 
   console.log(`info ${JSON.stringify(studyUtils.info())}`);
@@ -91,7 +100,7 @@ function shutdown(addonData, reason) {
 
   // normal shutdown, or 2nd attempts
     console.log("Jsms unloading");
-    recommender.shutdown();
+    if (recommender) recommender.shutdown();
     Cu.unload("resource://focused-cfr-shield-study/Recommender.jsm");
     Jsm.unload(config.modules);
     Jsm.unload([CONFIGPATH, STUDYUTILSPATH]);

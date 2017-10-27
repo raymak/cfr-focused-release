@@ -60,12 +60,15 @@ var config = {
     "endings": {
       /** standard endings */
       "user-disable": {
-        "baseUrl": "https://qsurvey.mozilla.com/s3/Focused-CFR-V2",
+        "baseUrl": null,
       },
       "ineligible": {
         "baseUrl": null,
       },
       "expired": {
+        "baseUrl": null,
+      },
+      "expired-queued": {
         "baseUrl": "https://qsurvey.mozilla.com/s3/Focused-CFR-V2",
       },
       /** User defined endings */

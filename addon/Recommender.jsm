@@ -50,6 +50,7 @@ const PAGE_VISIT_GAP_PREF = "extensions.focused_cfr_study.page_visit_gap_minutes
 const DEBUG_MODE_PREF = "extensions.focused_cfr_study.debug_mode";
 const POCKET_LATEST_SINCE_PREF = "extensions.pocket.settings.latestSince";
 const MOBILE_PRESENTATION_DELAY_PREF = "extensions.focused_cfr_study.mobile_presentation_delay_minutes";
+const QUEUED_PREF = "extensions.focused_cfr_study.queued";
 
 const POCKET_BOOKMARK_COUNT_TRHESHOLD = 80;
 const AMAZON_VISIT_THRESHOLD = 1;
@@ -194,6 +195,7 @@ class Recommender {
     Preferences.set(PAGE_VISIT_GAP_PREF, PAGE_VISIT_GAP_MINUTES);
     Preferences.set(DEBUG_MODE_PREF, false);
     Preferences.set(MOBILE_PRESENTATION_DELAY_PREF, MOBILE_PRESENTATION_DELAY_MINS);
+    Preferences.set(QUEUED_PREF, 0);
 
     Preferences.set(INIT_PREF, true);
 
@@ -620,6 +622,7 @@ class Recommender {
     recomm.status = "queued";
 
     await Storage.update(`recomms.${id}`, recomm);
+    Preferences.set(QUEUED_PREF, Preferences.get(QUEUED_PREF) + 1);
 
     this.reportEvent(id, "queued");
   }
@@ -735,7 +738,7 @@ class Recommender {
 
   shutdown() {
 
-    log('shutting down Recommender.jsm');
+    log("shutting down Recommender.jsm");
 
     bmsvc.removeObserver(bookmarkObserver);
 
