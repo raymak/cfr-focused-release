@@ -2,40 +2,46 @@
 
 ## Manual / QA TEST Instructions
 
-## Overall overview of what the addon does
-[COPY THE OVERVIEW]
+## Overall overview of what the addon 
 
-We would like to build a Firefox system addon that has the capability of proactively recommending Firefox features based on user behavior.
+We would like to build a Firefox system addon that has the capability of proactively recommending Firefox features based on user behavior. This study is a limited version of the system addon that focuses only on three features. By focusing on three features, we focus on exploring the effects of various UI treatments and timing parameters.
 
-Features
+###Features
 This study involves recommending three Firefox features:
 
-Amazon Assistant (extension)
-Pocket (system addon)
-Mobile Promotion
+* Amazon Assistant (extension)
+* Pocket (system addon)
+* Mobile Promotion
 
+## TEST CONDITIONS
+Do the tests in Windows and in Firefox release (version 56).
 
 ## Before starting the testing
-Look at the '....' attachment in the bug [this bug].
+Look at the 'Signed addon 1.0.3' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
+
+Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1407757). Download the attachment. This is the 'shield-qa-helper' addon. 
 
 ### BEFORE EACH TEST: CREATE AND GO to a CLEAN (NEW) PROFILE
 
-0.  (create profile:  https://developer.mozilla.org/en-US/Firefox/Multiple_profiles, or via some other method)
+0.  (create profile:  https://developer.mozilla.org/en-US/Firefox/Multiple_profiles, or via some other method such as using about:profiles)
+
+### To install the addon 
 1.  In your Firefox profile
 2.  `about:addons` > `extensions`
 3.  Open the drop-down menu with the cog icon in the upper right corner
 4.  `Install Add-on From File`
 
-## 1. UI APPEARANCE -- Amazon Assistant (DOORHANGER)
+### Do these tests
+
+## 1. UI APPEARANCE -- Amazon Assistant and Pocket (DOORHANGER)
 
 1.  Setup
 
     - [CREATE STRING PREFRENCE][create-preference]
     
-        name `extensions.focused_cfr_study.variation` 
+        name: `extensions.focused_cfr_study.variation` 
         value: `{"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}`
     
-    - INSTALL ADDON:  qa-telemeter
     - INSTALL ADDON:  cfr-focused-release
     
 2.  ACTION: NAVIGATE to amazon.com
@@ -44,263 +50,337 @@ Look at the '....' attachment in the bug [this bug].
 
      1. A doorhanger opens attached from the awesome bar (screenshot)
      2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
-     3. 2 buttons.  Labels "Not Now" and 'Add to Firefox'
+     3. Two buttons.  Labels 'Not Now' and 'Add to Firefox'
 
-4.  CLICK on 'Not Now'.
+4.  ACTION: CLICK on 'Not Now'
 
-5.  VERIFY doorhanger closes.
+5.  VERIFY doorhanger closes
 
+6. [CHANGE INTEGER PREF][create-preference]
 
-Note: failure if:
+  name: `extensions.focused_cfr_study.pocket_bookmark_count_threshold`
+  new value:  `1`
+7. ACTION: BOOKMARK any webpage
+8. VERIFY: no notifications are shown
+9. [CHANGE INTEGER PREF][create-preference]
 
-- Doorhanger does not pop up
-- Elements are not correct or are not displayed
+  name: `extensions.focused_cfr_study.notification_gap_minutes`
+new value: `-1`
+10. [CHANGE INTEGER PREF][create-preference]
 
+  name: `extensions.focused_cfr_study.max_number_of_notifications`
+new value: `2`
 
-[create-preference]: http://sumo.mozilla.com
+11. ACTION: BOOKMARK any webpage
+12. VERIFY doorhanger panel
 
-### Do these tests.
+  1. A doorhanger opens attached from the Pocket icon (screenshot)
+  2. Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
+  3. Two buttons. Labels 'Not Now' and 'Try it Now'
+13. ACTION: Click on 'Try it Now'
+14. VERIFY: A new tab opens with url: 'https://getpocket.com/a/queue/'
+15. ACTION: Shut down Firefox
+16. ACTION: Open Firefox with the same profile created in step 1
+17. ACTION: navigate to `amazon.com`
+18. VERIFY: no notifications are shown
+19. ACTION: bookmark any web page
+20. VERIFY: no notifications are shown
+21. [CHANGE INTEGER PREF][create-preference]
 
-1.  UI APPEARANCE -- Amazon Assistant (DOORHANGER)
+  name: `extensions.focused_cfr_study.page_visit_gap_minutes`
+new value: `-1`
+22. ACTION: NAVIGATE to `amazon.com`
+23. VERIFY doorhanger panel
 
-    * Create a new profile
-    * Set Preferences
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
-    *  Go to `amazon.com`
-    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/qPSg63E.png))
-    *  Text is 'Instant product matches while you shop across the web with Amazon Assistant'
-    *  Buttons are "Not Now" and 'Add to Firefox'
-    *  'Not Now' closes the doorhanger
-    *  'Add to Firefox' directs the user to 'www.amazon.com/gp/BIT/ref=bit_v2_BDFF1?tagbase=mozilla1' and closes the panel
-
-    Test fails IF:
-
-    - Doorhanger does not pop up
-    - Elements are not correct or are not displayed
-
-Setup
-Create a new profile
-Create a new string preference ' ' with value ''
-Install the QA addon
-Install the CFR addon
-Action
-Navigare to amazon.com
-
-Verify
-Doorhanger hangs from the awesome bar
-Verify .....
-Verify
-
-
-
-2.  UI APPEARANCE -- Amazon Assistant (NOTIFICATION BAR)
-
-    * Create a new profile
-    * Set Preferences
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
-    *  Go to `amazon.com`
-    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/O2pg5Nv.png))
-    *  Text is 'Instant product matches while you shop across the web with Amazon Assistant'
-    *  Buttons are 'Add to Firefox' and an 'x' button on the right corner of the panel
-    *  'x' closes the panel
-    *  'Add to Firefox' directs the user to "www.amazon.com/gp/BIT/ref=bit_v2_BDFF1?tagbase=mozilla1" and closes the panel
-
-    Test fails IF:
-
-    - Notification bar does not pop up
-    - Elements are not correct or are not displayed
-
-3.  UI APPEARANCE -- Pocket (DOORHANGER)
-
-    * Create a new profile
-    * Set Preferences
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
-    * Set Preferences
-    &nbsp; extensions.focused_cfr_study.pocket_bookmark_count_threshold = 2
-    *  Bookmark any web page
-    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/JmSKatg.png))
-    *  Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
-    *  Buttons are 'Make a match'
-    *  'Not Now' closes the doorhanger
-    *  'Make a match' directs the user to 'https://getpocket.com/firefox/' and closes the panel
-
-    Test fails IF:
-
-    - Doorhanger does not pop up
-    - Elements are not correct or are not displayed
-
-4.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
-
-    * Create a new profile
-    * Create String Preference
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
-    * Install the addon
-    * Set Preferences
-    &nbsp; extensions.focused_cfr_study.pocket_bookmark_count_threshold = 2
-    *  Use the s
-    *  N
-    *  Expect a notification bar appears on top of the page (it should look like this: [screenshot](https://i.imgur.com/a72w2Op.png))
-    *  Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
-    *  Buttons are 'Try it Now' and an 'x' button on the right corner of the panel
-    *  'x' closes the panel
-    *  'Try it Now' directs the user to 'https://getpocket.com/firefox/' and closes the panel
-
-    Test fails IF:
-
-    - Notification bar does not pop up
-    - Elements are not correct or are not displayed
-
-5.  UI APPEARANCE -- Mobile Promotion (DOORHANGER)
-
-    * Create a new profile
-    * Set Preferences
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
-    *  (Create and) log into a Firefox Sync account that has no mobile devices attached to it
-    *  Wait for 5 minutes after logging in
-    *  A doorhanger hangs from the awesome bar ([screenshot](https://i.imgur.com/stQsKLJ.png))
-    *  Text is 'Your Firefox account meets your phone. They fall in love. Get Firefox on your phone now.'
-    *  Buttons are 'Not Now' and 'Try it Now'
-    *  'Not Now' closes the doorhanger
-    *  'Make a match' directs the user to 'https://www.mozilla.org/en-US/firefox/mobile-download/desktop/' and closes the panel
-
-    Test fails IF:
-
-    - Doorhanger does not pop up
-    - Elements are not correct or are not displayed
-
-6.  UI APPEARANCE -- Pocket (NOTIFICATION BAR)
+     1. A doorhanger opens attached from the awesome bar (screenshot)
+     2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
+     3. Two buttons.  Labels 'Not Now' and 'Add to Firefox'
+24. ACTION: CLICK on 'Not Now'
+25. VERIFY: doorhanger closes
+26. ACTION: NAVIGATE to 'amazon.com'
+27. VERIFY: no notifications are shown
 
 
-    * Create a new profile
-    * Set Preferences
-    &nbsp; etensions.focused_cfr_study.variation = {"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}
-    *  Install the addon
-    *  (Create and) log into a Firefox Sync account that has no mobile devices attached to it
-    *  Wait for 10 minutes after logging in
-    *  A notification bar appears on top of the page ([screenshot](https://i.imgur.com/vOzhbOf.png))
-    *  Text is 'Your Firefox account meets your phone. They fall in love. Get Firefox on your phone now.'
-    *  Buttons are 'Make a Match' and an 'x' button on the right corner of the panel
-    *  'x' closes the panel
-    *  'Make a match' directs the user to 'https://www.mozilla.org/en-US/firefox/mobile-download/desktop/' and closes the panel
+[create-preference]: http://kb.mozillazine.org/About:config
 
-    Test fails IF:
+## 2. Telemetry -- Amazon Assistant (NOTIFICATION BAR)
 
-    - Notification bar does not pop up
-    - Elements are not correct or are not displayed
+1.  Setup
 
-7. TELEMETRY PING -- Notification Result
+    - [CREATE STRING PREFRENCE][create-preference]
+    
+        name: `extensions.focused_cfr_study.variation` 
+        value: `{"name": "bar-amazon-high", "weight": 1, "ui": "bar", "amazon": "high", "sponsored": "false"}`
+    
+    - INSTALL ADDON:  shield-qa-helper
+    - INSTALL ADDON:  cfr-focused-release
+    
+2.  ACTION: NAVIGATE to amazon.com
+    
+3.  VERIFY notification bar
 
-  * Performing one of tests 1 to 6 should result in the Telemetry ping with a payload similar to the following: 
+     1. A notification bar appears on top of the web page (screenshot)
+     2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
+     3. Two buttons.  'Add to Firefox' and a 'x' button on the right corner.
 
-``` {
-  "version": 3,
-  "study_name": "focused-cfr-release-2",
-  "branch": "doorhanger-amazon-low",
-  "addon_version": "1.0.1",
-  "shield_version": "4.0.0",
-  "type": "shield-study-addon",
-  "data": {
-    "attributes": {
-      "message_type": "notification_result",
-      "variation": "doorhanger-amazon-low",
-      "variation_ui": "doorhanger",
-      "variation_amazon": "low",
-      "variation_sponsored": "false",
-      "nevershow": "false",
-      "count": "1",
-      "status": "presented",
-      "id": "amazon-assistant",
-      "result": "dismiss"
-    }
-  },
-  "testing": true
-}
+4.  ACTION: CLICK on 'x'
 
-```
-  * the "result" field should be one of [`dismiss`, `action`, `close`, `timeout`] depending on what you do on the panel: `dimiss` is clicking on `Not Now`; `action` is clicking the blue button; `close` is clicking the `x` button; `timeout` is not interacting with the panel for two minutes (and it fades)
-  * the "nevershow" field should be "false" or "true" based on whether the "Don't show this me again" checkbox has been checked
+5.  VERIFY notification bar closes
+6.  Use the 'QA Shield Study' button on the toolbar to open the Shield QA helper
+7. VERIFY you see the following log (everything except for the exact dates)
 
-    Test fails IF:
+<pre>
+// common fields
 
-    - No such ping is submitted to telemetry
-    - Any of the fields is empty
-    - Any of the fields does not match the branch or the recommended feature
+branch        bar-amazon-high        // should describe Question text
+study_name    focused-cfr-release-2
+addon_version 1.0.3
+version       3
 
-8. TELEMETRY PING -- Events
-
-  * Performing one of the tests 1 to 6 should result in the Telemetry ping with a payload similar to the following: 
-
-``` 
+0 2017-10-30T16:54:02.555Z shield-study
 {
-  "version": 3,
-  "study_name": "focused-cfr-release-2",
-  "branch": "doorhanger-amazon-high-sponsored",
-  "addon_version": "1.0.1",
-  "shield_version": "4.0.0",
-  "type": "shield-study-addon",
-  "data": {
-    "attributes": {
-      "message_type": "event",
-      "variation": "doorhanger-amazon-high",
-      "variation_ui": "doorhanger",
-      "variation_amazon": "high",
-      "variation_sponsored": "true",
-      "id": "amazon-assistant",
-      "event": "presented"
-    }
-  },
-  "testing": false
+  "study_state": "enter"
 }
-```
-
-  * you should see at least two pings with `message_type`: `event`: one with `event`: `presented` and one with `event`: `queued`
-
-   Test fails IF:
-
-    - No such ping is submitted to telemetry
-    - Any of the fields is empty
-    - Any of the fields does not match the branch or the recommended feature
-
-9. PERSISTENCE TEST -- Initialization
-
-  * Install the addon
-  * Shut down Firefox and open it again with the same profile
-  * Perform one of tests 1 to 6
-  * You should still see the expected result
-
-10. NOTIFICATION LIMITING -- Global Notification Limiting
-
-  * Perform test 1
-  * Perform test 3 on the *same profile* after the installation step (do not reinstall the addon)
-  * No notification should be shown
-
-  Test fails IF:
-
-    - A notification is shown after the bookmarking
 
 
-11. NOTIFICATION LIMITING -- Per Feature Limiting
-
-  * Set Preferences
-  &nbsp; etensions.focused_cfr_study.variation = {"name": "doorhanger-amazon-high-sponsored", "weight": 1, "ui": "doorhanger", "amazon": "high", "sponsored": "true"}
-  * Install the addon
-  * Set Preferences
-  &nbsp; extensions.focused_cfr_study.page_visit_gap_minutes = 0
-  &nbsp; extensions.focused_cfr_study.max_number_of_notifications = 1
-  &nbsp; extensions.focused_cfr_study.notification_gap_minutes = 0
-  * Go to `amazon.com`
-  * You should see a doorhanger with the Amazon Assistant recommendation
-  * Dismiss the doorhanger by clicking on "Not Now"
-  * Go to `amazon.com` again
-  * You should not see any notifications
-
-  Test fails IF:
-
-    - A notification is shown after the second visit to `Amazon.com`
+1 2017-10-30T16:54:02.561Z shield-study
+{
+  "study_state": "installed"
+}
 
 
+2 2017-10-30T16:54:02.610Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "event",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "id": "bookmark-count",
+    "event": "5"
+  }
+}
 
+
+3 2017-10-30T16:54:02.619Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "summary_log",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_delivered": "false",
+    "amazon_action": "false",
+    "amazon_close": "false",
+    "amazon_dismiss": "false",
+    "amazon_nevershow": "false",
+    "amazon_timeout": "false",
+    "amazon_preused": "false",
+    "amazon_postused": "false",
+    "mobile-promo_delivered": "false",
+    "mobile-promo_action": "false",
+    "mobile-promo_close": "false",
+    "mobile-promo_dismiss": "false",
+    "mobile-promo_nevershow": "false",
+    "mobile-promo_timeout": "false",
+    "mobile-promo-preused": "false",
+    "mobile-promo-postued": "false",
+    "pocket_delivered": "false",
+    "pocket_action": "false",
+    "pocket_close": "false",
+    "pocket_dismiss": "false",
+    "pocket_nevershow": "false",
+    "pocket_timeout": "false",
+    "pocket_preused": "false",
+    "pocket_postused": "false"
+  }
+}
+
+
+4 2017-10-30T16:54:02.623Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "final_report",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_status": "waiting",
+    "amazon_show_count": "0",
+    "amazon_trigger_count": "0",
+    "amazon_nevershow": "false",
+    "mobile-promo_status": "waiting",
+    "mobile-promo_show_count": "0",
+    "mobile-promo_nevershow": "false",
+    "pocket_status": "waiting",
+    "pocket_show_count": "0",
+    "pocket_nevershow": "0"
+  }
+}
+
+
+5 2017-10-30T16:54:13.763Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "event",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "id": "amazon-assistant",
+    "event": "queued"
+  }
+}
+
+
+6 2017-10-30T16:54:13.786Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "final_report",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_status": "queued",
+    "amazon_show_count": "0",
+    "amazon_trigger_count": "1",
+    "amazon_nevershow": "false",
+    "mobile-promo_status": "waiting",
+    "mobile-promo_show_count": "0",
+    "mobile-promo_nevershow": "false",
+    "pocket_status": "waiting",
+    "pocket_show_count": "0",
+    "pocket_nevershow": "0"
+  }
+}
+
+
+7 2017-10-30T16:54:13.818Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "event",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "id": "amazon-assistant",
+    "event": "presented"
+  }
+}
+
+
+8 2017-10-30T16:54:13.841Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "summary_log",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_delivered": "false",
+    "amazon_action": "false",
+    "amazon_close": "false",
+    "amazon_dismiss": "false",
+    "amazon_nevershow": "false",
+    "amazon_timeout": "false",
+    "amazon_preused": "false",
+    "amazon_postused": "false",
+    "mobile-promo_delivered": "false",
+    "mobile-promo_action": "false",
+    "mobile-promo_close": "false",
+    "mobile-promo_dismiss": "false",
+    "mobile-promo_nevershow": "false",
+    "mobile-promo_timeout": "false",
+    "mobile-promo-preused": "false",
+    "mobile-promo-postued": "false",
+    "pocket_delivered": "false",
+    "pocket_action": "false",
+    "pocket_close": "false",
+    "pocket_dismiss": "false",
+    "pocket_nevershow": "false",
+    "pocket_timeout": "false",
+    "pocket_preused": "false",
+    "pocket_postused": "false",
+    "amazon-assistant_delivered": "true"
+  }
+}
+
+
+9 2017-10-30T16:54:13.845Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "final_report",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_status": "presented",
+    "amazon_show_count": "1",
+    "amazon_trigger_count": "1",
+    "amazon_nevershow": "false",
+    "mobile-promo_status": "waiting",
+    "mobile-promo_show_count": "0",
+    "mobile-promo_nevershow": "false",
+    "pocket_status": "waiting",
+    "pocket_show_count": "0",
+    "pocket_nevershow": "0"
+  }
+}
+
+
+10 2017-10-30T16:55:05.939Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "summary_log",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "amazon_delivered": "false",
+    "amazon_action": "false",
+    "amazon_close": "false",
+    "amazon_dismiss": "false",
+    "amazon_nevershow": "false",
+    "amazon_timeout": "false",
+    "amazon_preused": "false",
+    "amazon_postused": "false",
+    "mobile-promo_delivered": "false",
+    "mobile-promo_action": "false",
+    "mobile-promo_close": "false",
+    "mobile-promo_dismiss": "false",
+    "mobile-promo_nevershow": "false",
+    "mobile-promo_timeout": "false",
+    "mobile-promo-preused": "false",
+    "mobile-promo-postued": "false",
+    "pocket_delivered": "false",
+    "pocket_action": "false",
+    "pocket_close": "false",
+    "pocket_dismiss": "false",
+    "pocket_nevershow": "false",
+    "pocket_timeout": "false",
+    "pocket_preused": "false",
+    "pocket_postused": "false",
+    "amazon-assistant_delivered": "true",
+    "amazon-assistant_close": "true"
+  }
+}
+
+
+11 2017-10-30T16:55:05.950Z shield-study-addon
+{
+  "attributes": {
+    "message_type": "notification_result",
+    "variation": "bar-amazon-high",
+    "variation_ui": "bar",
+    "variation_amazon": "high",
+    "variation_sponsored": "false",
+    "count": "1",
+    "status": "presented",
+    "id": "amazon-assistant",
+    "nevershow": "false",
+    "result": "close"
+  }
+}
+</pre>
