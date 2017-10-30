@@ -1,6 +1,6 @@
 {
   "name": "focused-cfr-shield-study",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Firefox Shield study to evaluate in-context feature recommendations.",
   "main": "index.js",
   "scripts": {
