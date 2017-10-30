@@ -217,6 +217,35 @@ class Recommender {
     this.telemetry(data);
   }
 
+  async finalReport() {
+    let data = {
+      "message_type": "final_report",
+      "variation": this.variation,
+      "variation_ui": this.variationUi,
+      "variation_amazon": this.variationAmazon,
+      "variation_sponsored": this.variationSponsored,
+    };
+
+    const amazon = await Storage.get("recomms.amazon-assistant");
+    const pocket = await Storage.get("recomms.pocket");
+    const mobile = await Storage.get("recomms.mobile-promo");
+
+    data = Object.assign({}, data, {
+      "amazon_status": amazon.status,
+      "amazon_show_count": String(amazon.presentation.count),
+      "amazon_trigger_count": String(amazon.trigger.visitCount),
+      "amazon_nevershow": String(amazon.presentation.never),
+      "mobile-promo_status": mobile.status,
+      "mobile-promo_show_count": String(mobile.presentation.count),
+      "mobile-promo_nevershow": String(mobile.presentation.never),
+      "pocket_status": pocket.status,
+      "pocket_show_count": String(pocket.presentation.count),
+      "pocket_nevershow": String(pocket.presentation.count),
+    });
+    log(`final report`, data);
+    await this.telemetry(data);
+  }
+
   async reportEvent(id, event) {
     const data = {
       "message_type": "event",
@@ -229,6 +258,7 @@ class Recommender {
     };
     log(`event report:`, data);
     this.telemetry(data);
+    this.finalReport();
   }
 
   async reportNotificationResult(result, nevershow) {

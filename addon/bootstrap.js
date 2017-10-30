@@ -64,14 +64,13 @@ async function startup(addonData, reason) {
 
   const expirationDate = new Date(Preferences.get(EXPIRATION_DATE_STRING_PREF));
   if (Date.now() > expirationDate) {
-    if (Preferences.get(QUEUED_PREF) && Preferences.get(QUEUED_PREF) > 0){
+    if (Preferences.get(QUEUED_PREF) && Preferences.get(QUEUED_PREF) > 0) {
       await studyUtils.endStudy({ reason: "expired-queued"});
       return;
     }
-    else{
-      await studyUtils.endStudy({ reason: "expired" });
-      return;
-    }
+
+    await studyUtils.endStudy({ reason: "expired" });
+    return;
   }
 
   console.log(`info ${JSON.stringify(studyUtils.info())}`);
