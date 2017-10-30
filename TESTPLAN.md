@@ -6,7 +6,7 @@
 
 We would like to build a Firefox system addon that has the capability of proactively recommending Firefox features based on user behavior. This study is a limited version of the system addon that focuses only on three features. By focusing on three features, we focus on exploring the effects of various UI treatments and timing parameters.
 
-###Features
+### Features
 This study involves recommending three Firefox features:
 
 * Amazon Assistant (extension)
@@ -23,7 +23,7 @@ Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](
 
 ### BEFORE EACH TEST: CREATE AND GO to a CLEAN (NEW) PROFILE
 
-0.  (create profile:  https://developer.mozilla.org/en-US/Firefox/Multiple_profiles, or via some other method such as using about:profiles)
+(create profile:  https://developer.mozilla.org/en-US/Firefox/Multiple_profiles, or via some other method such as using about:profiles)
 
 ### To install the addon 
 1.  In your Firefox profile
@@ -60,12 +60,14 @@ Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](
 
   name: `extensions.focused_cfr_study.pocket_bookmark_count_threshold`
   new value:  `1`
+
 7. ACTION: BOOKMARK any webpage
 8. VERIFY: no notifications are shown
 9. [CHANGE INTEGER PREF][create-preference]
 
   name: `extensions.focused_cfr_study.notification_gap_minutes`
 new value: `-1`
+
 10. [CHANGE INTEGER PREF][create-preference]
 
   name: `extensions.focused_cfr_study.max_number_of_notifications`
@@ -127,7 +129,7 @@ new value: `-1`
 
 5.  VERIFY notification bar closes
 6.  Use the 'QA Shield Study' button on the toolbar to open the Shield QA helper
-7. VERIFY you see the following log (everything except for the exact dates)
+7.  VERIFY you see the following log (everything except for the exact dates)
 
 <pre>
 // common fields
