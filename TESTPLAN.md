@@ -48,7 +48,7 @@ Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](
     
 3.  VERIFY doorhanger panel
 
-     1. A doorhanger opens attached from the awesome bar (screenshot)
+     1. A doorhanger opens attached from the awesome bar ![screenshot](https://i.imgur.com/D1cyiFW.png)
      2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
      3. Two buttons.  Labels 'Not Now' and 'Add to Firefox'
 
@@ -74,7 +74,7 @@ new value: `2`
 11. ACTION: BOOKMARK any webpage
 12. VERIFY doorhanger panel
 
-  1. A doorhanger opens attached from the Pocket icon (screenshot)
+  1. A doorhanger opens attached from the Pocket icon ![screenshot](https://i.imgur.com/zZbMvQ0.png)
   2. Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
   3. Two buttons. Labels 'Not Now' and 'Try it Now'
 13. ACTION: Click on 'Try it Now'
@@ -92,7 +92,7 @@ new value: `-1`
 22. ACTION: NAVIGATE to `amazon.com`
 23. VERIFY doorhanger panel
 
-     1. A doorhanger opens attached from the awesome bar (screenshot)
+     1. A doorhanger opens attached from the awesome bar ![screenshot](https://i.imgur.com/D1cyiFW.png)
      2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
      3. Two buttons.  Labels 'Not Now' and 'Add to Firefox'
 24. ACTION: CLICK on 'Not Now'
@@ -119,7 +119,7 @@ new value: `-1`
     
 3.  VERIFY notification bar
 
-     1. A notification bar appears on top of the web page (screenshot)
+     1. A notification bar appears on top of the web page ![screenshot](https://i.imgur.com/wOeXCRK.png)
      2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
      3. Two buttons.  'Add to Firefox' and a 'x' button on the right corner.
 
