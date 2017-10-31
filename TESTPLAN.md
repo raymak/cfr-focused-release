@@ -76,9 +76,10 @@ new value: `2`
 11. ACTION: BOOKMARK any webpage
 12. VERIFY doorhanger panel
 
-  1. A doorhanger opens attached from the Pocket icon ![screenshot](https://i.imgur.com/zZbMvQ0.png)
-  2. Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
-  3. Two buttons. Labels 'Not Now' and 'Try it Now'
+     1. A doorhanger opens attached from the Pocket icon ![screenshot](https://i.imgur.com/zZbMvQ0.png)
+     2. Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
+     3. Two buttons. Labels 'Not Now' and 'Try it Now'
+
 13. ACTION: Click on 'Try it Now'
 14. VERIFY: A new tab opens with url: 'https://getpocket.com/a/queue/'
 15. ACTION: Shut down Firefox
@@ -88,15 +89,17 @@ new value: `2`
 19. ACTION: bookmark any web page
 20. VERIFY: no notifications are shown
 21. [CHANGE INTEGER PREF][create-preference]
-
+    
   name: `extensions.focused_cfr_study.page_visit_gap_minutes`
 new value: `-1`
+
 22. ACTION: NAVIGATE to `amazon.com`
 23. VERIFY doorhanger panel
 
      1. A doorhanger opens attached from the awesome bar ![screenshot](https://i.imgur.com/D1cyiFW.png)
      2. Text is 'Instant product matches while you shop across the web with Amazon Assistant'
      3. Two buttons.  Labels 'Not Now' and 'Add to Firefox'
+     
 24. ACTION: CLICK on 'Not Now'
 25. VERIFY: doorhanger closes
 26. ACTION: NAVIGATE to 'amazon.com'
