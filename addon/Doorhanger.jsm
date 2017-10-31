@@ -116,7 +116,7 @@ class Doorhanger {
     let popAnchor = burgerButton;
 
     if (id === "pocket") {
-      const pocketButton = win.document.getElementById("pocket-button-box");
+      const pocketButton = win.document.getElementById("pocket-button");
       if (pocketButton && win.getComputedStyle(pocketButton).display !== "none") {
         popAnchor = pocketButton;
       }

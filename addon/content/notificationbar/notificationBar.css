@@ -12,6 +12,7 @@
   --reject-button-hover-background-color: #e1e1e2;
 }
 
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 
@@ -20,6 +21,8 @@ body {
     sans-serif;
   color: var(--primary-text-color);
   font-size: 16px;
+  min-width: 800px;
+  overflow:hidden;
 }
 
 *::before, *::after, * {
@@ -43,6 +46,18 @@ a {
 
 .notification-bar.hidden {
   display: none;
+}
+
+@media (max-width: 1000px) {
+  #checkbox, #checkbox-label, #fake-checkbox {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  #close-icon, .content-right-wrapper {
+    display: none;
+  }
 }
 
 .content-left-wrapper, .content-right-wrapper {

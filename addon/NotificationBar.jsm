@@ -66,7 +66,11 @@ class NotificationBar {
 
     box = win.document.createElement("hbox");
     box.setAttribute("id", "focused-cfr-notificationbar-box");
-    box.style.height = "56px";
+    if (Services.appinfo.OS === "Darwin") {
+      box.style.height = "56px";
+    } else {
+      box.style.height = "60px";
+    }
 
     const embeddedBrowser = win.document.createElement("browser");
     embeddedBrowser.setAttribute("id", "focused-cfr-notificationbar");
