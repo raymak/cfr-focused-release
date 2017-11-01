@@ -3,6 +3,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/* global variables */
+:root {
+  --primary-color: #f1f1f1;
+  --primary-text-color: #333333;
+  --link-text-color: #0996F8;
+  --primary-border-color: #b7b7b7;
+  --standard-box-shadow: 0 1px 0 rgba(12,13,14,0.1),0 1px 3px rgba(12,13,14,0.1),0 4px 20px rgba(12,13,14,0.035),0 1px 1px rgba(12,13,14,0.025);
+  --dropdown-box-shadow: 0 50px 100px rgba(50, 50, 93, .1), 0 15px 35px rgba(50, 50, 93, .15), 0 5px 15px rgba(0, 0, 0, .1);
+  --accept-button-background-color: #0094FB;
+  --accept-button-hover-background-color: #00329a;
+  --reject-button-background-color: #fbfbfb;
+  --reject-button-hover-background-color: #e1e1e2;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -549,6 +563,10 @@ input[type=checkbox]:not(old):checked + label > span:before{
   display: flex;
 }
 
+a.external-link:hover {
+  text-decoration: underline;
+}
+
 /* Remove System Checkbox */
 input[type="checkbox"] {
   display:none;
@@ -565,6 +583,10 @@ input[type="checkbox"] {
   border-radius: 4px;
   margin: 0 .5em 0 0;
   cursor: pointer;
+}
+
+.checkbox:hover {
+  border-color: var(--accept-button-background-color);
 }
 
 .checkbox-label {
