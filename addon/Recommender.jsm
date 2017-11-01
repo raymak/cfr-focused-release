@@ -548,9 +548,18 @@ class Recommender {
 
     while (windowEnumerator.hasMoreElements()) {
       const window = windowEnumerator.getNext();
-      window.gBrowser.addProgressListener(progressListener);
-    }
 
+      const onOpenWindow = function(e) {
+        window.gBrowser.addProgressListener(progressListener);
+        window.removeEventListener("load", onOpenWindow);
+      };
+
+      if (window.gBrowser) {
+        window.gBrowser.addProgressListener(progressListener);
+      } else {
+        window.addEventListener("load", onOpenWindow, true);
+      }
+    }
 
     // new windows
     windowListener = {

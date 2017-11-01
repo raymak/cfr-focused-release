@@ -17,7 +17,7 @@ This study involves recommending three Firefox features:
 Do the tests in Windows and in Firefox release (version 56).
 
 ## Before starting the testing
-Look at the 'Signed addon 1.0.3' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
+Look at the 'Signed addon 1.0.4' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
 
 Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1407757). Download the attachment. This is the 'shield-qa-helper' addon. 
 
