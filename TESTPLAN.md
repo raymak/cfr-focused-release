@@ -76,7 +76,7 @@ new value: `2`
 11. ACTION: BOOKMARK any webpage
 12. VERIFY doorhanger panel
 
-     1. A doorhanger opens attached from the Pocket icon ![screenshot](https://i.imgur.com/zZbMvQ0.png)
+     1. A doorhanger opens attached from the toolbar ![screenshot](https://i.imgur.com/zZbMvQ0.png)
      2. Text is 'Pocket lets you save for later articles, videos, or pretty much anything!'
      3. Two buttons. Labels 'Not Now' and 'Try it Now'
 
