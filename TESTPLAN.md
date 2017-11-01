@@ -17,7 +17,7 @@ This study involves recommending three Firefox features:
 Do the tests in Windows and in Firefox release (version 56).
 
 ## Before starting the testing
-Look at the 'Signed addon 1.0.4' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
+Look at the 'focused-cfr-shield-study-2@mozilla.com-1.0.4-signed.xpi' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
 
 Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1407757). Download the attachment. This is the 'shield-qa-helper' addon. 
 
@@ -139,22 +139,22 @@ new value: `-1`
 
 branch        bar-amazon-high        // should describe Question text
 study_name    focused-cfr-release-2
-addon_version 1.0.3
+addon_version 1.0.4
 version       3
 
-0 2017-10-30T16:54:02.555Z shield-study
+0 2017-11-01T06:46:04.596Z shield-study
 {
   "study_state": "enter"
 }
 
 
-1 2017-10-30T16:54:02.561Z shield-study
+1 2017-11-01T06:46:04.602Z shield-study
 {
   "study_state": "installed"
 }
 
 
-2 2017-10-30T16:54:02.610Z shield-study-addon
+2 2017-11-01T06:46:04.753Z shield-study-addon
 {
   "attributes": {
     "message_type": "event",
@@ -168,7 +168,7 @@ version       3
 }
 
 
-3 2017-10-30T16:54:02.619Z shield-study-addon
+3 2017-11-01T06:46:04.780Z shield-study-addon
 {
   "attributes": {
     "message_type": "summary_log",
@@ -204,7 +204,7 @@ version       3
 }
 
 
-4 2017-10-30T16:54:02.623Z shield-study-addon
+4 2017-11-01T06:46:04.787Z shield-study-addon
 {
   "attributes": {
     "message_type": "final_report",
@@ -226,7 +226,7 @@ version       3
 }
 
 
-5 2017-10-30T16:54:13.763Z shield-study-addon
+5 2017-11-01T06:46:34.072Z shield-study-addon
 {
   "attributes": {
     "message_type": "event",
@@ -240,7 +240,7 @@ version       3
 }
 
 
-6 2017-10-30T16:54:13.786Z shield-study-addon
+6 2017-11-01T06:46:34.119Z shield-study-addon
 {
   "attributes": {
     "message_type": "final_report",
@@ -262,7 +262,7 @@ version       3
 }
 
 
-7 2017-10-30T16:54:13.818Z shield-study-addon
+7 2017-11-01T06:46:34.139Z shield-study-addon
 {
   "attributes": {
     "message_type": "event",
@@ -276,7 +276,7 @@ version       3
 }
 
 
-8 2017-10-30T16:54:13.841Z shield-study-addon
+8 2017-11-01T06:46:34.154Z shield-study-addon
 {
   "attributes": {
     "message_type": "summary_log",
@@ -313,7 +313,7 @@ version       3
 }
 
 
-9 2017-10-30T16:54:13.845Z shield-study-addon
+9 2017-11-01T06:46:34.174Z shield-study-addon
 {
   "attributes": {
     "message_type": "final_report",
@@ -335,7 +335,7 @@ version       3
 }
 
 
-10 2017-10-30T16:55:05.939Z shield-study-addon
+10 2017-11-01T06:46:46.463Z shield-study-addon
 {
   "attributes": {
     "message_type": "summary_log",
@@ -373,7 +373,7 @@ version       3
 }
 
 
-11 2017-10-30T16:55:05.950Z shield-study-addon
+11 2017-11-01T06:46:46.471Z shield-study-addon
 {
   "attributes": {
     "message_type": "notification_result",
@@ -388,4 +388,5 @@ version       3
     "result": "close"
   }
 }
+
 </pre>
