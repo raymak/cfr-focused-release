@@ -109,7 +109,7 @@ const recipes = {
   "pocket": {
     id: "pocket",
     message: {
-      text: "Pocket lets you save for later articles, videos, or pretty much anything!",
+      text: "To save pages for later and read without distractions, try saving them to Pocket",
       link: {
         text: "Pocket",
         url: "https://getpocket.com/firefox/?src=cfr-tooltip",
@@ -117,7 +117,7 @@ const recipes = {
     },
     primaryButton: {
       label: "Try it Now",
-      url: "http://www.getpocket.com/firefox_tryitnow",
+      url: "http://www.getpocket.com/firefox_tryitnow?src=cfr-tooltip",
     },
     icon: {
       url: "resource://focused-cfr-shield-study-content/images/pocket.png",

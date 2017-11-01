@@ -74,7 +74,8 @@ class Doorhanger {
     panel.setAttribute("type", "arrow");
     panel.setAttribute("noautofocus", true);
     panel.setAttribute("noautohide", true);
-    panel.setAttribute("level", "floating");
+    panel.setAttribute("flip", "slide");
+    panel.setAttribute("level", "parent");
 
     if (Services.appinfo.OS === "Darwin") {
 	    panel.style.height = "183px";

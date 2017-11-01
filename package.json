@@ -1,6 +1,6 @@
 {
   "name": "focused-cfr-shield-study",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Firefox Shield study to evaluate in-context feature recommendations.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "shield-studies-addon-utils": "^4.0.0"
   },
   "addon": {
-    "version": "1.0.4",
+    "version": "1.0.5",
     "id": "focused-cfr-shield-study-2@mozilla.com",
     "name": "Focused Contextual Feature Recommender Shield Study",
     "minVersion": "55.0",
