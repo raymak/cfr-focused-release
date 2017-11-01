@@ -4,7 +4,7 @@
   --primary-text-color: #333333;
   --link-text-color: #0996F8;
   --primary-border-color: #b7b7b7;
-  --standard-box-shadow: 0 1px 0 0 rgba(0,0,0,0.35);
+  --standard-box-shadow: 0 1px 0 rgba(12,13,14,0.1),0 1px 3px rgba(12,13,14,0.1),0 4px 20px rgba(12,13,14,0.035),0 1px 1px rgba(12,13,14,0.025);
   --dropdown-box-shadow: 0 50px 100px rgba(50, 50, 93, .1), 0 15px 35px rgba(50, 50, 93, .15), 0 5px 15px rgba(0, 0, 0, .1);
   --accept-button-background-color: #0094FB;
   --accept-button-hover-background-color: #00329a;
@@ -21,7 +21,7 @@ body {
     sans-serif;
   color: var(--primary-text-color);
   font-size: 16px;
-  min-width: 800px;
+  min-width: 850px;
   overflow:hidden;
 }
 
@@ -72,6 +72,10 @@ a {
 
 .link {
   margin-left: 5px;
+}
+
+a.external-link:hover {
+  text-decoration: underline;
 }
 
 .button {
@@ -203,7 +207,7 @@ a {
   width: 28px;
 }
 
-.star-rating, #additional-info, #close-icon {
+.star-rating, #additional-info {
   margin-left: 10px;
 }
 
@@ -223,6 +227,10 @@ input[type="checkbox"] {
   border-radius: 4px;
   margin: 0 .5em;
   cursor: pointer;
+}
+
+.checkbox:hover {
+  border-color: var(--accept-button-background-color);
 }
 
 .checkbox-label {
@@ -255,9 +263,105 @@ input[type="checkbox"]:checked + span:after {
   transform: rotate(45deg);
 }
 
+.close-icon-wrapper {
+  display: inline-block;
+  cursor: pointer;
+}
 
 #close-icon {
+  display: inline-block;
   fill: var(--primary-text-color);
-  width: 10px;
-  cursor: pointer;
+  width: 20px;
+  padding: 5px;
+}
+
+#close-icon:hover {
+  background-color: #e0e0e1;
+}
+
+[data-tooltip] {
+    display: inline-block;
+    position: relative;
+}
+/* Tooltip styling */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    display: none;
+    position: absolute;
+    background: #e9e9eb;
+    color: black;
+    padding: 4px;
+    font-size: .75em;
+    min-width: 125px;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #bebdbd;
+    box-shadow: var(--standard-box-shadow);
+}
+/* Dynamic horizontal centering */
+[data-tooltip-position="top"]:before,
+[data-tooltip-position="bottom"]:before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+/* Dynamic vertical centering */
+[data-tooltip-position="right"]:before,
+[data-tooltip-position="left"]:before {
+    top: 50%;
+    transform: translateY(-50%);
+}
+[data-tooltip-position="top"]:before {
+    bottom: 100%;
+    margin-bottom: 0;
+}
+[data-tooltip-position="right"]:before {
+    left: 100%;
+    margin-left: 0;
+}
+[data-tooltip-position="bottom"]:before {
+    top: 100%;
+    margin-top: 0;
+}
+[data-tooltip-position="left"]:before {
+    right: 100%;
+    margin-right: 0;
+}
+
+/* Dynamic horizontal centering for the tooltip */
+[data-tooltip-position="top"]:after,
+[data-tooltip-position="bottom"]:after {
+    left: 50%;
+    margin-left: -6px;
+}
+/* Dynamic vertical centering for the tooltip */
+[data-tooltip-position="right"]:after,
+[data-tooltip-position="left"]:after {
+    top: 50%;
+    margin-top: -6px;
+}
+[data-tooltip-position="top"]:after {
+    bottom: 100%;
+    border-width: 6px 6px 0;
+    border-top-color: #000;
+}
+[data-tooltip-position="right"]:after {
+    left: 100%;
+    border-width: 6px 6px 6px 0;
+    border-right-color: #000;
+}
+[data-tooltip-position="bottom"]:after {
+    top: 100%;
+    border-width: 0 6px 6px;
+    border-bottom-color: #000;
+}
+[data-tooltip-position="left"]:after {
+    right: 100%;
+    border-width: 6px 0 6px 6px;
+    border-left-color: #000;
+}
+/* Show the tooltip when hovering */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+    display: block;
+    z-index: 50;
 }
