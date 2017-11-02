@@ -43,7 +43,7 @@ async function startup(addonData, reason) {
 
   if (!Preferences.has(EXPIRATION_DATE_STRING_PREF)) {
     const now = new Date(Date.now());
-    const expirationDateString = new Date(now.setDate(now.getDate() + 14)).toISOString();
+    const expirationDateString = new Date(now.setDate(now.getDate() + 11)).toISOString();
     Preferences.set(EXPIRATION_DATE_STRING_PREF, expirationDateString);
   }
 
