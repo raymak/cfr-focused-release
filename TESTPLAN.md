@@ -19,9 +19,9 @@ Do the tests in Windows and in Firefox release (version 56).
 ## NOTE: Small variations in size and visual styling between Windows and Mac OS (the screenshots) are OK
 
 ## Before starting the testing
-Look at the 'focused-cfr-shield-study-2@mozilla.com-1.0.5-signed.xpi' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment. This is the 'cfr-focused-release' addon.
+Look at the 'focused-cfr-shield-study-2<!-- -->@mozilla.com-1.0.5-signed.xpi' attachment in the [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1412410). Download the attachment as a file and save it locally. This is the 'cfr-focused-release' addon.
 
-Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1407757). Download the attachment. This is the 'shield-qa-helper' addon. 
+Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1407757). Download the attachment as a file and save it locally. This is the 'shield-qa-helper' addon. 
 
 ### BEFORE EACH TEST: CREATE AND GO to a CLEAN (NEW) PROFILE
 
@@ -39,6 +39,7 @@ Look at the '@qa-shield-study-helper-1.0.0-signed.xpi' attachment in [this bug](
 
 1.  Setup
 
+    - Create and open a new Firefox profile
     - [CREATE STRING PREFRENCE][create-preference]
     
         name: `extensions.focused_cfr_study.variation` 
@@ -114,6 +115,7 @@ new value: `-1`
 
 1.  Setup
 
+    - Create and open a new Firefox profile
     - [CREATE STRING PREFRENCE][create-preference]
     
         name: `extensions.focused_cfr_study.variation` 
