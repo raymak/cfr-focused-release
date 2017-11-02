@@ -82,6 +82,7 @@ new value: `2`
      1. A doorhanger opens attached from the toolbar ![screenshot](https://i.imgur.com/ADF2ycS.png)
      2. Text is 'To save pages for later and read without distractions, try saving them to Pocket'
      3. Two buttons. Labels 'Not Now' and 'Try it Now'
+     4. The doorhanger may overlap with the bookmark panel and that is accepted in this study
 
 13. ACTION: Click on 'Try it Now'
 14. VERIFY: A new tab opens with url: 'https://getpocket.com/a/queue/'
