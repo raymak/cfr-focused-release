@@ -1,4 +1,4 @@
-# Focused Contextual Feature Recommender (CFR) Shield Study in Firefox beta
+# Focused Contextual Feature Recommender (CFR) Shield Study in Firefox release 56
 
 ## Overview
 This Firefox [Shield](https://wiki.mozilla.org/Firefox/Shield/Shield_Studies) study proactively recommends three Firefox features (Amazon Assistant, Pocket, Firefox Mobile) to those users that are predicted to benefit from them. It also compares the effectiveness of the recommendations in various conditions including using a doorhanger or notification bar.
